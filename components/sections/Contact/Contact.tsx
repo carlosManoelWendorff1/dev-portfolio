@@ -259,9 +259,9 @@ export default function Contact() {
 
           {/* Mensagem final */}
           <div className="flex items-center justify-center gap-2 text-white/40 text-sm">
-            <span>Feito com</span>
+            <span>{t.madeWithLove}</span>
             <Heart className="w-4 h-4 text-pink-400 fill-pink-400 animate-pulse" />
-            <span>usando Next.js, Tailwind e Shadcn UI</span>
+            <span>{t.used}</span>
           </div>
         </div>
       </div>

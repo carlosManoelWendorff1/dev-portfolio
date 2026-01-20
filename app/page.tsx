@@ -4,7 +4,7 @@ import Hero from "@/components/sections/Hero/Hero";
 import Work from "@/components/sections/Work/Work";
 import Expertise from "@/components/sections/Expertise/Expertise";
 import Experience from "@/components/sections/Experience/Experience";
-import Contact from "@/components/sections/Contatct/Contact";
+import Contact from "@/components/sections/Contact/Contact";
 
 export default function Page() {
   return (

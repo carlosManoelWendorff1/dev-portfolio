@@ -5,6 +5,8 @@ export const dict = {
     role: "Engenheiro de Software Full Stack",
     desc: "Desenvolvo soluções completas utilizando tecnologias modernas como React, Next.js e Java com Spring Boot/Quarkus. Foco em performance, escalabilidade e código limpo.",
     projects: "Ver projetos",
+    madeWithLove: "Feito com",
+    used: "usando Next.js, Tailwind e Shadcn UI",
     contact: {
       title: "Vamos Conversar?",
       subtitle: "Estou sempre aberto a novas oportunidades e conexões",
@@ -173,6 +175,8 @@ export const dict = {
     role: "Full Stack Software Engineer",
     desc: "I develop complete solutions using modern technologies like React, Next.js, and Java with Spring Boot/Quarkus. Focus on performance, scalability, and clean code.",
     projects: "View Projects",
+    madeWithLove: "Made with",
+    used: "using Next.js, Tailwind and Shadcn UI",
     contact: {
       title: "Let's Connect",
       subtitle: "I'm always open to new opportunities and connections",
