@@ -124,7 +124,7 @@ export default function Experience() {
                       <div className="mb-8">
                         <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
                           <Code className="w-5 h-5" />
-                          Principais Responsabilidades
+                          {t.resp}
                         </h4>
                         <ul className="space-y-3">
                           {exp.responsibilities.map((resp, respIndex) => (
@@ -139,10 +139,9 @@ export default function Experience() {
                         </ul>
                       </div>
 
-                      {/* Tecnologias */}
                       <div>
                         <h4 className="text-white font-semibold mb-4">
-                          Tecnologias e Habilidades
+                          {t.technologiesUsed}
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {exp.technologies.map((tech, techIndex) => (
@@ -164,7 +163,6 @@ export default function Experience() {
           })}
         </Accordion>
 
-        {/* Seção de Educação usando Cards Shadcn */}
         <div className="mt-24">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4">
@@ -175,8 +173,6 @@ export default function Experience() {
           <div className="grid md:grid-cols-2 gap-6">
             {t.education.items.map((edu, index) => (
               <div key={index} className="group">
-                {/* Efeito de brilho */}
-
                 <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm h-full">
                   <CardHeader>
                     <div className="flex items-start gap-4">

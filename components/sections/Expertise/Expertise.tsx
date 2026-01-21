@@ -56,7 +56,7 @@ export default function ExpertiseV1() {
               <div key={i} className="group relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500"></div>
 
-                <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border-white/10 backdrop-blur-sm">
+                <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border-white/10 backdrop-blur-sm h-full">
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-4">
                       <div

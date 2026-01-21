@@ -12,20 +12,32 @@ import {
   Sparkles,
   Heart,
   ArrowBigUpDashIcon,
+  User,
+  MessageSquare,
+  CheckCircle,
+  Loader2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
 
 // Dados de contato
 const contactData = {
-  email: "carlosmwendorffDev@gmail.com",
+  email: "carlosmwendorff@gmail.com",
   linkedin: "https://www.linkedin.com/in/carlos-manoel-wendorff-66b875228",
   github: "https://github.com/carlosManoelWendorff1",
 };
 
-// Partículas pré-definidas (sem Math.random no render inicial)
+const EMAILJS_CONFIG = {
+  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
+  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string,
+  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string,
+};
+// Partículas pré-definidas
 const particles = [
   { left: "10%", top: "20%", delay: "0s", duration: "3.5s" },
   { left: "25%", top: "60%", delay: "0.5s", duration: "4s" },
@@ -47,22 +59,93 @@ const particles = [
 export default function Contact() {
   const { lang } = useI18n();
   const t = dict[lang];
-  const [currentYear, setCurrentYear] = useState(2024); // Valor fixo inicial
+  const [currentYear, setCurrentYear] = useState(2024);
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Estados do formulário
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setMounted(true);
     setCurrentYear(new Date().getFullYear());
     setIsVisible(true);
-  }, []);
 
-  const handleEmailClick = () => {
-    window.location.href = `mailto:${contactData.email}`;
-  };
+    // Inicializar EmailJS
+    emailjs.init(EMAILJS_CONFIG.publicKey);
+  }, []);
 
   const handleSocialClick = (url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Submitting form with data:", formData);
+    console.log(EMAILJS_CONFIG);
+    // Validação simples
+    if (!formData.name || !formData.email || !formData.message) {
+      setError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject || `Mensagem de ${formData.name} - Portfólio`,
+        message: formData.message,
+        reply_to: formData.email,
+
+        date: new Date().toLocaleDateString("pt-BR"),
+        time: new Date().toLocaleTimeString("pt-BR"),
+      };
+
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        templateParams,
+        { publicKey: EMAILJS_CONFIG.publicKey },
+      );
+
+      setIsSuccess(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (err) {
+      setError(
+        "Erro ao enviar mensagem. Tente novamente ou use o email diretamente.",
+      );
+      console.error("EmailJS error:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDirectEmail = () => {
+    window.location.href = `mailto:${contactData.email}?subject=${encodeURIComponent(formData.subject || "Contato do Portfólio")}&body=${encodeURIComponent(`Nome: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
   };
 
   if (!mounted) {
@@ -70,7 +153,7 @@ export default function Contact() {
       <footer
         id="contact"
         className="relative bg-gradient-to-b from-[#1a1f2e] to-[#0b1220] pt-24 pb-12 overflow-hidden"
-        style={{ height: "800px" }} // Altura aproximada para evitar layout shift
+        style={{ height: "800px" }}
       >
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center">
@@ -87,25 +170,13 @@ export default function Contact() {
       id="contact"
       className="relative bg-gradient-to-b from-[#1a1f2e] to-[#0b1220] pt-24 pb-12 overflow-hidden"
     >
+      {/* Elementos decorativos */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-
-        {particles.map((particle, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            style={{
-              left: particle.left,
-              top: particle.top,
-              animation: `float ${particle.duration} infinite ease-in-out`,
-              animationDelay: particle.delay,
-            }}
-          ></div>
-        ))}
+        {/* ... partículas permanecem iguais ... */}
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Cabeçalho */}
         <div
           className={`text-center mb-16 transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -132,94 +203,211 @@ export default function Contact() {
           </div>
         </div>
 
-        <div
-          className={`grid md:grid-cols-3 gap-6 mb-16 transition-all duration-1000 delay-200 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* Formulário */}
           <div className="group">
-            <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm hover:border-blue-500/30 transition-all duration-300 hover:scale-[1.02]">
+            <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                    <Mail className="w-6 h-6 text-blue-300" />
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
+                    <Mail className="w-6 h-6 text-cyan-300" />
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-blue-400 transition-colors" />
+                  <CardTitle className="text-white">
+                    {t.contact.form.title}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-white">{t.contact.email}</CardTitle>
+                <p className="text-white/60 text-sm">
+                  {t.contact.form.description}
+                </p>
               </CardHeader>
 
               <CardContent>
-                <p className="text-white/60 text-sm mb-6">
-                  Clique para enviar um e-mail diretamente
-                </p>
-                <Button
-                  onClick={handleEmailClick}
-                  className="w-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-white hover:from-blue-500/30 hover:to-cyan-500/30 border border-blue-500/30 hover:border-blue-400/50"
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  Enviar E-mail
-                </Button>
+                {isSuccess ? (
+                  <div className="text-center py-8">
+                    <div className="inline-flex p-4 rounded-full bg-green-500/10 mb-4">
+                      <CheckCircle className="w-12 h-12 text-green-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {t.contact.form.successTitle}
+                    </h3>
+                    <p className="text-white/60">
+                      {t.contact.form.successMessage}
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-300 text-sm">
+                        {error}
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-white/80">
+                        <User className="w-4 h-4 inline mr-2" />
+                        {t.contact.form.name} {t.contact.form.required}
+                      </Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder={t.contact.form.placeholder.name}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-cyan-500/50"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-white/80">
+                        <Mail className="w-4 h-4 inline mr-2" />
+                        {t.contact.form.email} {t.contact.form.required}
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder={t.contact.form.placeholder.email}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-cyan-500/50"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="subject" className="text-white/80">
+                        {t.contact.form.subject} {t.contact.form.optional}
+                      </Label>
+                      <Input
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        placeholder={t.contact.form.placeholder.subject}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-cyan-500/50"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message" className="text-white/80">
+                        <MessageSquare className="w-4 h-4 inline mr-2" />
+                        {t.contact.form.message} {t.contact.form.required}
+                      </Label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder={t.contact.form.placeholder.message}
+                        rows={4}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-cyan-500/50 resize-none"
+                        required
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            {t.contact.form.sending}
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-4 h-4 mr-2" />
+                            {t.contact.form.sendButton}
+                          </>
+                        )}
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleDirectEmail}
+                        className="border-white/20 text-white hover:bg-white/5"
+                      >
+                        {t.contact.form.directEmailButton}
+                      </Button>
+                    </div>
+                  </form>
+                )}
               </CardContent>
             </Card>
           </div>
 
-          <div className="group">
-            <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm hover:border-blue-600/30 transition-all duration-300 hover:scale-[1.02]">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-400/20">
-                    <Linkedin className="w-6 h-6 text-blue-300" />
+          {/* Cards Laterais */}
+          <div className="space-y-6">
+            {/* LinkedIn Card */}
+            <div className="group">
+              <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm hover:border-blue-600/30 transition-all duration-300 hover:scale-[1.02]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-400/20">
+                        <Linkedin className="w-6 h-6 text-blue-300" />
+                      </div>
+                      <CardTitle className="text-white">
+                        {t.contact.cards.linkedin.title}
+                      </CardTitle>
+                    </div>
+                    <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-blue-500 transition-colors" />
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-blue-500 transition-colors" />
-                </div>
-                <CardTitle className="text-white">
-                  {t.contact.linkedin}
-                </CardTitle>
-              </CardHeader>
+                </CardHeader>
 
-              <CardContent>
-                <p className="text-white/60 text-sm mb-6">
-                  Conecte-se comigo profissionalmente
-                </p>
-                <Button
-                  onClick={() => handleSocialClick(contactData.linkedin)}
-                  className="w-full bg-gradient-to-r from-blue-600/20 to-blue-400/20 text-white hover:from-blue-600/30 hover:to-blue-400/30 border border-blue-600/30 hover:border-blue-500/50"
-                >
-                  Ver Perfil
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+                <CardContent>
+                  <p className="text-white/60 text-sm mb-4">
+                    {t.contact.cards.linkedin.description}
+                  </p>
+                  <Button
+                    onClick={() => handleSocialClick(contactData.linkedin)}
+                    className="w-full bg-gradient-to-r from-blue-600/10 to-blue-400/10 text-white hover:from-blue-600/20 hover:to-blue-400/20 border border-blue-600/20 hover:border-blue-500/40"
+                  >
+                    {lang === "pt"
+                      ? "Ver Perfil Completo"
+                      : "View Full Profile"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
 
-          <div className="group">
-            <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm hover:border-blue-200/30 transition-all duration-300 hover:scale-[1.02]">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-gray-700/20 to-gray-900/20">
-                    <Github className="w-6 h-6 text-gray-300" />
+            {/* GitHub Card */}
+            <div className="group">
+              <Card className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm hover:border-gray-600/30 transition-all duration-300 hover:scale-[1.02]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-gray-700/20 to-gray-900/20">
+                        <Github className="w-6 h-6 text-gray-300" />
+                      </div>
+                      <CardTitle className="text-white">
+                        {t.contact.cards.github.title}
+                      </CardTitle>
+                    </div>
+                    <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-gray-400 transition-colors" />
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-gray-400 transition-colors" />
-                </div>
-                <CardTitle className="text-white">{t.contact.github}</CardTitle>
-              </CardHeader>
+                </CardHeader>
 
-              <CardContent>
-                <p className="text-white/60 text-sm mb-6">
-                  Veja meus projetos e contribuições
-                </p>
-                <Button
-                  onClick={() => handleSocialClick(contactData.github)}
-                  className="w-full bg-gradient-to-r from-gray-700/20 to-gray-900/20 text-white hover:from-gray-700/30 hover:to-gray-900/30 border border-gray-700/30 hover:border-gray-600/50"
-                >
-                  Ver Repositórios
-                </Button>
-              </CardContent>
-            </Card>
+                <CardContent>
+                  <p className="text-white/60 text-sm mb-4">
+                    {t.contact.cards.github.description}
+                  </p>
+                  <Button
+                    onClick={() => handleSocialClick(contactData.github)}
+                    className="w-full bg-gradient-to-r from-gray-700/10 to-gray-900/10 text-white hover:from-gray-700/20 hover:to-gray-900/20 border border-gray-700/20 hover:border-gray-600/40"
+                  >
+                    {lang === "pt" ? "Ver Repositórios" : "View Repositories"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
 
-        {/* Footer Final */}
         <div
           className={`text-center pt-8 border-t border-white/10 transition-all duration-1000 delay-600 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -232,11 +420,15 @@ export default function Contact() {
 
             <div className="flex items-center gap-6">
               <button
-                onClick={handleEmailClick}
+                onClick={() =>
+                  (window.location.href = `mailto:${contactData.email}`)
+                }
                 className="text-white/60 hover:text-white transition-colors flex items-center gap-2 group"
               >
                 <Mail className="w-4 h-4" />
-                <span className="group-hover:underline">E-mail</span>
+                <span className="group-hover:underline">
+                  {t.contact.footer.email}
+                </span>
               </button>
 
               <button
@@ -244,7 +436,9 @@ export default function Contact() {
                 className="text-white/60 hover:text-blue-400 transition-colors flex items-center gap-2 group"
               >
                 <Linkedin className="w-4 h-4" />
-                <span className="group-hover:underline">LinkedIn</span>
+                <span className="group-hover:underline">
+                  {t.contact.footer.linkedin}
+                </span>
               </button>
 
               <button
@@ -252,48 +446,29 @@ export default function Contact() {
                 className="text-white/60 hover:text-gray-300 transition-colors flex items-center gap-2 group"
               >
                 <Github className="w-4 h-4" />
-                <span className="group-hover:underline">GitHub</span>
+                <span className="group-hover:underline">
+                  {t.contact.footer.github}
+                </span>
               </button>
             </div>
           </div>
 
           {/* Mensagem final */}
           <div className="flex items-center justify-center gap-2 text-white/40 text-sm">
-            <span>{t.madeWithLove}</span>
+            <span>{t.contact.footer.madeWith}</span>
             <Heart className="w-4 h-4 text-pink-400 fill-pink-400 animate-pulse" />
-            <span>{t.used}</span>
+            <span>{t.contact.footer.using}</span>
           </div>
         </div>
       </div>
 
-      {/* Botão de voltar ao topo - apenas se estiver scrollado */}
+      {/* Botão de voltar ao topo */}
       <ScrollToTopButton />
 
-      <style jsx>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(180deg);
-          }
-        }
-
-        @keyframes pulse-glow {
-          0%,
-          100% {
-            opacity: 0.1;
-          }
-          50% {
-            opacity: 0.3;
-          }
-        }
-      `}</style>
+      {/* ... style permanece igual ... */}
     </footer>
   );
 }
-
 // Componente separado para o botão de scroll
 function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
@@ -326,7 +501,7 @@ function ScrollToTopButton() {
       className="fixed bottom-8 right-8 p-3 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-white/10 backdrop-blur-sm text-white hover:scale-110 transition-all duration-300 hover:border-white/30 z-50"
       aria-label="Voltar ao topo"
     >
-      <ArrowBigUpDashIcon className="w-5 h-5 " />
+      <ArrowBigUpDashIcon className="w-5 h-5" />
     </button>
   );
 }

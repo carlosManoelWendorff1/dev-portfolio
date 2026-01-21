@@ -5,6 +5,7 @@ import Work from "@/components/sections/Work/Work";
 import Expertise from "@/components/sections/Expertise/Expertise";
 import Experience from "@/components/sections/Experience/Experience";
 import Contact from "@/components/sections/Contact/Contact";
+import HeroNew from "@/components/sections/Hero/HeroNew";
 
 export default function Page() {
   return (
@@ -12,7 +13,7 @@ export default function Page() {
       <Header />
 
       <main className="pt-20">
-        <Hero />
+        <HeroNew />
         <Expertise />
 
         <Work />

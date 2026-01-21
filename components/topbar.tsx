@@ -11,6 +11,13 @@ import { BrazilFlag } from "@/i18n/BrazilFlag";
 import { EUAFlag } from "@/i18n/EUAFlag";
 import { dict } from "@/i18n/dictionary";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 const menu = [
   { id: "hero", index: 0 },
@@ -41,7 +48,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* LOGO */}
         <span className="font-semibold text-xl tracking-wide bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-          CarlosManoelWendorff._
+          CarlosWendorff._
         </span>
 
         {/* MENU */}
@@ -80,23 +87,45 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* SWITCH */}
-        <button
-          onClick={() => setLang(lang === "pt" ? "en" : "pt")}
-          className="flex items-center gap-2 px-3 py-1 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-400/10"
-        >
-          {lang === "pt" ? (
-            <>
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2 px-3 py-1 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-400/10">
+              {lang === "pt" ? (
+                <>
+                  <BrazilFlag className="w-5 h-5" />
+                  <span>PT</span>
+                </>
+              ) : (
+                <>
+                  <EUAFlag className="w-5 h-5" />
+                  <span>EN</span>
+                </>
+              )}
+              <ChevronDown className="w-3 h-3 ml-1" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            align="end"
+            className="bg-[#0b1220]/95 backdrop-blur-md border border-white/10"
+          >
+            <DropdownMenuItem
+              onClick={() => setLang("pt")}
+              className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
+            >
               <BrazilFlag className="w-5 h-5" />
               <span>PT</span>
-            </>
-          ) : (
-            <>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              onClick={() => setLang("en")}
+              className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
+            >
               <EUAFlag className="w-5 h-5" />
               <span>EN</span>
-            </>
-          )}
-        </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
