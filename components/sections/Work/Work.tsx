@@ -119,23 +119,17 @@ export default function Work() {
               variants={itemVariants}
               className="group relative"
             >
-              {/* Efeito de brilho no hover */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
 
-              {/* Card */}
               <div className="relative bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 backdrop-blur-sm rounded-xl overflow-hidden h-64">
-                {/* Container da Imagem */}
                 <div className="relative h-full overflow-hidden">
-                  {/* Placeholder/Imagem */}
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                     <div className="text-4xl font-bold text-white/20">
                       {project.title.charAt(0)}
                     </div>
                   </div>
 
-                  {/* Overlay com conteúdo */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 flex flex-col justify-end transition-all duration-300 group-hover:backdrop-blur-sm">
-                    {/* Conteúdo normal (some no hover) */}
                     <div className="transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-4">
                       <h3 className="text-xl font-bold text-white mb-1">
                         {project.title}
@@ -143,7 +137,6 @@ export default function Work() {
                       <p className="text-white/60 text-sm">{project.type}</p>
                     </div>
 
-                    {/* Botão de ver projeto (aparece no hover) */}
                     <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 opacity-0 translate-y-4">
                       <Button
                         onClick={() =>
@@ -162,7 +155,6 @@ export default function Work() {
                     </div>
                   </div>
 
-                  {/* Badge de demo */}
                   {project.demo && (
                     <div className="absolute top-4 right-4">
                       <div className="px-3 py-1 bg-green-500/20 text-green-300 text-xs font-medium rounded-full border border-green-500/30 backdrop-blur-sm">
@@ -173,7 +165,6 @@ export default function Work() {
                 </div>
               </div>
 
-              {/* Indicador de link externo (sutil) */}
               <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <ExternalLink className="w-4 h-4 text-white/40" />
               </div>
@@ -181,7 +172,6 @@ export default function Work() {
           ))}
         </motion.div>
 
-        {/* Call to Action no final */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
