@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 
 const menu = [
   { id: "hero", index: 0 },
@@ -46,13 +46,11 @@ export default function Header() {
   return (
     <header className="fixed top-0 w-full z-50 bg-[#0b1220]/90 backdrop-blur border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        {/* LOGO */}
         <span className="font-semibold text-xl tracking-wide bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
           CarlosWendorff._
         </span>
 
-        {/* MENU */}
-        <NavigationMenu>
+        <NavigationMenu className="hidden lg:block">
           <NavigationMenuList className="flex gap-10">
             {menu.map((item, i) => {
               const isActive = active === item.id;
@@ -61,20 +59,10 @@ export default function Header() {
                 <NavigationMenuItem key={item.id}>
                   <NavigationMenuLink
                     onClick={() => handleScroll(item.id)}
-                    className="group flex items-center gap-2 cursor-pointer"
+                    className="group flex items-center gap-0.5 cursor-pointer  mx-2"
                   >
                     <span
-                      className={`text-xs ${
-                        isActive
-                          ? "text-cyan-400 animate-pulse"
-                          : "text-white/50"
-                      }`}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-
-                    <span
-                      className={`text-sm tracking-wide ${
+                      className={`text-sm tracking-wide  whitespace-nowrap ${
                         isActive ? "text-cyan-400" : "text-white/50"
                       }`}
                     >
@@ -87,45 +75,81 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 px-3 py-1 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-400/10">
-              {lang === "pt" ? (
-                <>
-                  <BrazilFlag className="w-5 h-5" />
-                  <span>PT</span>
-                </>
-              ) : (
-                <>
-                  <EUAFlag className="w-5 h-5" />
-                  <span>EN</span>
-                </>
-              )}
-              <ChevronDown className="w-3 h-3 ml-1" />
-            </button>
-          </DropdownMenuTrigger>
+        <div className="flex items-center gap-3">
+          <div className="lg:hidden">
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 px-3 py-1 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-400/10 focus:outline-none">
+                  <Menu className="w-6 h-full" />
+                </button>
+              </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            align="end"
-            className="bg-[#0b1220]/95 backdrop-blur-md border border-white/10"
-          >
-            <DropdownMenuItem
-              onClick={() => setLang("pt")}
-              className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
-            >
-              <BrazilFlag className="w-5 h-5" />
-              <span>PT</span>
-            </DropdownMenuItem>
+              <DropdownMenuContent
+                align="end"
+                className="w-56 bg-[#0b1220]/95 backdrop-blur-md border border-white/10"
+              >
+                {menu.map((item, i) => {
+                  const isActive = active === item.id;
 
-            <DropdownMenuItem
-              onClick={() => setLang("en")}
-              className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
+                  return (
+                    <DropdownMenuItem
+                      key={item.id}
+                      onClick={() => handleScroll(item.id)}
+                      className={`flex items-center gap-3 px-3 py-3 cursor-pointer ${
+                        isActive ? "text-cyan-400" : "text-white/70"
+                      }`}
+                    >
+                      <span className="text-xs">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm">{t.menu[item.index]}</span>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 px-3 py-1 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-400/10">
+                {lang === "pt" ? (
+                  <>
+                    <BrazilFlag className="w-5 h-5" />
+                    <span className="hidden sm:inline">PT</span>
+                  </>
+                ) : (
+                  <>
+                    <EUAFlag className="w-5 h-5" />
+                    <span className="hidden sm:inline">EN</span>
+                  </>
+                )}
+                <ChevronDown className="w-3 h-3 ml-1" />
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="bg-[#0b1220]/95 backdrop-blur-md border border-white/10"
             >
-              <EUAFlag className="w-5 h-5" />
-              <span>EN</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuItem
+                onClick={() => setLang("pt")}
+                className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
+              >
+                <BrazilFlag className="w-5 h-5" />
+                <span>PT</span>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => setLang("en")}
+                className="flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/5"
+              >
+                <EUAFlag className="w-5 h-5" />
+                <span>EN</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );
