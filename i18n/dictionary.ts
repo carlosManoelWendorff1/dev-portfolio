@@ -667,5 +667,188 @@ export const dict = {
         },
       ],
     },
+experience: {
+  title: "Professional Experience",
+
+  subtitle:
+    "My journey and contributions",
+
+  items: [
+    {
+      company: "WEG",
+
+      role:
+        "Full Stack Software Engineer",
+
+      period:
+        "December 2024 - Present",
+
+      duration:
+        "1 year and 6 months",
+
+      location:
+        "Jaraguá do Sul, SC, Brazil",
+
+      description:
+        "Development of enterprise multisystem full-stack applications, building scalable, secure, and integrated solutions across different teams and platforms.",
+
+      technologies: [
+        "Java",
+        "Spring Boot",
+        "React",
+        "Next.js",
+        "Python",
+        "Design Systems",
+        "Microservices",
+        "Docker",
+        "Kubernetes",
+        "PostgreSQL",
+        "CI/CD",
+      ],
+
+      responsibilities: [
+        "Development of integrated enterprise full-stack applications",
+
+        "Creation and maintenance of a React Design System library",
+
+        "Implementation of improvements and modernization of existing systems",
+
+        "Development of a vulnerability management platform built from scratch",
+
+        "Creation of subsystems for data ingestion, synchronization, and processing",
+
+        "Centralization of information through distributed Java applications",
+
+        "Collaboration across multiple teams and enterprise architectures",
+      ],
+    },
+
+    {
+      company: "V2COM",
+
+      role:
+        "Technology Innovation Research Scholar",
+
+      period:
+        "October 2022 - December 2024",
+
+      duration:
+        "2 years and 3 months",
+
+      location:
+        "Santa Catarina, Brazil",
+
+      description:
+        "Research and development of innovative technological solutions focused on IoT, automation, and distributed systems.",
+
+      technologies: [
+        "Python",
+        "IoT",
+        "Research",
+        "Data Analysis",
+        "Prototyping",
+        "Java",
+        "Quarkus",
+        "Angular",
+        "React",
+      ],
+
+      responsibilities: [
+        "Development of prototypes for IoT solutions",
+
+        "Research and analysis of emerging technologies",
+
+        "Collaboration on innovation projects",
+
+        "Technical documentation and research reports",
+      ],
+    },
+
+    {
+      company: "NAXI Fibra",
+
+      role:
+        "Network Technical Support",
+
+      period:
+        "March 2022 - September 2022",
+
+      duration:
+        "7 months",
+
+      location:
+        "Jaraguá do Sul, SC, Brazil",
+
+      description:
+        "Specialized technical support for telecommunications networks.",
+
+      technologies: [
+        "Networking",
+        "Customer Support",
+        "Troubleshooting",
+        "TCP/IP",
+      ],
+
+      responsibilities: [
+        "Technical customer support",
+
+        "Network problem resolution",
+
+        "Equipment configuration",
+
+        "Internal support for network team",
+      ],
+    },
+  ],
+},
+
+education: {
+  title: "Academic Background",
+
+  items: [
+    {
+      institution:
+        "UDESC - Santa Catarina State University",
+
+      degree:
+        "Master’s Degree in Applied Computer Science",
+
+      period:
+        "2026 - Present",
+
+      description:
+        "Research focused on parallel and distributed computing, scalable architectures, and performance optimization for high-demand systems.",
+    },
+
+    {
+      institution:
+        "Católica de Santa Catarina - University Center",
+
+      degree:
+        "Bachelor's Degree in Software Engineering",
+
+      period:
+        "February 2022 - December 2025",
+
+      description:
+        "Comprehensive education in software engineering focused on development, architecture, and systems engineering.",
+    },
+
+    {
+      institution:
+        "SENAI/SC - National Industrial Learning Service",
+
+      degree:
+        "Technical Training",
+
+      period:
+        "2020 - December 2021",
+
+      description:
+        "Technical education focused on industrial and technological areas.",
+    },
+  ],
+},
+
   },
 };
